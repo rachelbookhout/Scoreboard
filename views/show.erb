@@ -1,0 +1,9 @@
+<h2> Season so far:
+<%@season_stats.each do |stat|%>
+<%= stat[0]%> - <%=stat[1]%>
+<%end%></h2>
+
+<h2> Games Played </h2>
+<%@team_games.each do |game|%>
+<h3><%=game["home_team"]%> vs. <%=game["away_team"]%> : <%=game["home_score"]%> - <%=game["away_score"]%></h3>
+<%end%>

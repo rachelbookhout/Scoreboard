@@ -20,7 +20,6 @@ lose_count = Hash.new{0}
     teams << game["home_team"]
     teams << game["away_team"]
     teams.uniq!
-
       if game["home_score"] > game["away_score"]
         winners << game["home_team"]
         losers << game["away_team"]
@@ -43,11 +42,30 @@ lose_count = Hash.new{0}
     unless losers.include?(team)
       lose_count[team] = 0
     end
-end
+  end
 team_record = lose_count.reduce(win_count.dup){|h,(k,v)| h[k] = (h[k] && [h[k], v] || v); h}
 end
 
 
+def team_history(data,team)
+team_games = []
+  data.each do |game|
+    if team == game["home_team"] || team == game["away_team"]
+      team_games << game
+    end
+  end
+team_games
+end
+
+def team_win_and_loss(team,league_history)
+  season_stats = []
+  league_history.each do |fb_team, record|
+    if team == fb_team
+      season_stats << record
+    end
+  end
+season_stats
+end
 
 
 before do
@@ -65,7 +83,11 @@ get '/leaderboard' do
 erb :index
 end
 
-# get '/teams/:team'
-# #  = params[:team]
-# erb :show
-# end
+get '/teams/:team' do
+@team_record = find_team_and_record(@scoreboard)
+team = params[:team]
+@team_games = team_history(@scoreboard, team)
+@season_stats = team_win_and_loss(team,@team_record)
+erb :show
+end
+
