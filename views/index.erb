@@ -1,0 +1,9 @@
+<h1> Leaderboard as of <%= Time.now %> </h1>
+
+<%@team_record.each do |team, record|%>
+  <h3><a href="/teams/<%=team%>"><%=team%></a></h3>
+
+  <h4>Wins:<%=record[0]%></h4>
+  <h4>Losses:<%=record[1]%></h4>
+<% end %>
+
